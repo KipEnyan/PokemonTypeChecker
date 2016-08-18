@@ -36,7 +36,7 @@ types["Ice"] = Type(["Dragon","Flying","Grass","Ground"],["Fire","Ice","Steel","
 types["Psychic"] = Type(["Fighting","Poison"],["Psychic","Steel"],["Dark"],["Bug","Dark","Ghost"],["Fighting","Psychic"],[])
 types["Water"] = Type(["Fire","Ground","Rock"],["Dragon","Grass","Water"],[],["Electric","Grass"],["Fire","Ice","Steel","Water"],[])
 
-myTypes = ["Grass","Flying","Fairy","Fire","Bug","Electric"]
+myTypes = ["Grass","Fairy","Fire","Bug","Electric","Psychic"]
 testTypes = ["Grass","Psychic","Fairy","Fire","Bug","Electric"]
 ericTypes = ["Electric", "Water","Ground","Rock"]
 
@@ -95,6 +95,8 @@ def calculateTypeLost(mostRedundant, strongTo):
                     lostTypes[aRedundant].append(key)
                 else:
                     lostTypes[aRedundant] = [key]
+        if not aRedundant in lostTypes:
+            lostTypes[aRedundant] = []
 
     return lostTypes
 
@@ -160,17 +162,23 @@ def printMostRedundant(mostRedundant, redundantStrongTo):
 
 def printLostTypes(lostTypes):
     '''Prints what coverage would be lost if the most redundant types were removed'''
-    if len(lostTypes) == 0:
-        print ("Removing your redundant types would not result in any lost type coverage.")
+    minLost = 19
+    for item in lostTypes.values():
+        if len(item) < minLost:
+            minLost = len(item)
+
     for key, value in lostTypes.items():
-        print("If you removed " + key + ", you would lose",end=" ")
-        for item in value:
-            if len(value) == 1:
-                print(item + " coverage.")
-            elif not item == value[-1]:
-                print(item,end=", ")
-            else:
-                print("and " + item,end=" coverage.\n")
+        if len(value) == minLost:
+            print("If you removed " + key + ", you would lose",end=" ")
+            if len(value) == 0:
+                print("no type coverage.")
+            for item in value:
+                if len(value) == 1:
+                    print(item + " coverage.")
+                elif not item == value[-1]:
+                    print(item,end=", ")
+                else:
+                    print("and " + item,end=" coverage.\n")
 
 def printStrongToAdditions(strongToAdditions, notStrongToWeaknesses):
     for item in strongToAdditions:
@@ -181,12 +189,16 @@ def printStrongToAdditions(strongToAdditions, notStrongToWeaknesses):
             else:
                 print("and " + aType + ".")
 
+print("Welcome to the Pokemon Type Calculator!")
+print("Please enter the type composition of your team, separated by commas.")
+entered = input()
+enteredTypes = entered.split(", ")
 
-strongTo = calculateStrongTo(ericTypes)
+strongTo = calculateStrongTo(enteredTypes)
 notStrongTo = calculateNotStrongTo(strongTo)
 redundantStrongTo = calculateRedundantStrongTo(strongTo)
 mostRedundant = calculateMostRedundant(redundantStrongTo)
-lostTypes = calculateTypeLost(mostRedundant, strongTo)
+lostTypes = calculateTypeLost(enteredTypes, strongTo)
 notStrongToWeaknesses = calculateNotStrongToWeaknesses(notStrongTo)
 strongToAdditions = calculateStrongToAdditions(notStrongToWeaknesses)
 
