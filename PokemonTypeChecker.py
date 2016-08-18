@@ -39,6 +39,7 @@ types["Water"] = Type(["Fire","Ground","Rock"],["Dragon","Grass","Water"],[],["E
 myTypes = ["Grass","Fairy","Fire","Bug","Electric","Psychic"]
 testTypes = ["Grass","Psychic","Fairy","Fire","Bug","Electric"]
 ericTypes = ["Electric", "Water","Ground","Rock"]
+programRunning = True
 
 def calculateStrongTo(myTypes):
     '''Returns a dict with the entered types as values and the types theyre strong against as keys'''
@@ -189,22 +190,32 @@ def printStrongToAdditions(strongToAdditions, notStrongToWeaknesses):
             else:
                 print("and " + aType + ".")
 
+def readInput():
+    print("Please enter the type composition of your team, separated by commas.")
+    entered = input()
+    if entered == "exit":
+        return False
+    enteredTypes = entered.split(", ")
+
+    strongTo = calculateStrongTo(enteredTypes)
+    notStrongTo = calculateNotStrongTo(strongTo)
+    redundantStrongTo = calculateRedundantStrongTo(strongTo)
+    mostRedundant = calculateMostRedundant(redundantStrongTo)
+    lostTypes = calculateTypeLost(enteredTypes, strongTo)
+    notStrongToWeaknesses = calculateNotStrongToWeaknesses(notStrongTo)
+    strongToAdditions = calculateStrongToAdditions(notStrongToWeaknesses)
+    
+    printStrongTo(strongTo)
+    printNotStrongTo(notStrongTo)
+    printMostRedundant(mostRedundant, redundantStrongTo)
+    printLostTypes(lostTypes)
+    printStrongToAdditions(strongToAdditions, notStrongToWeaknesses)
+    print()
+    return True
+
+
 print("Welcome to the Pokemon Type Calculator!")
-print("Please enter the type composition of your team, separated by commas.")
-entered = input()
-enteredTypes = entered.split(", ")
-
-strongTo = calculateStrongTo(enteredTypes)
-notStrongTo = calculateNotStrongTo(strongTo)
-redundantStrongTo = calculateRedundantStrongTo(strongTo)
-mostRedundant = calculateMostRedundant(redundantStrongTo)
-lostTypes = calculateTypeLost(enteredTypes, strongTo)
-notStrongToWeaknesses = calculateNotStrongToWeaknesses(notStrongTo)
-strongToAdditions = calculateStrongToAdditions(notStrongToWeaknesses)
-
-printStrongTo(strongTo)
-printNotStrongTo(notStrongTo)
-printMostRedundant(mostRedundant, redundantStrongTo)
-printLostTypes(lostTypes)
-printStrongToAdditions(strongToAdditions, notStrongToWeaknesses)
+print("Type 'exit' to quit.")
+while(readInput()):
+    pass
 
