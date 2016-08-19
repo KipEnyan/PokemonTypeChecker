@@ -132,7 +132,9 @@ def printStrongTo(strongTo):
     '''Prints a list of the types your team is strong against'''
     print("Your team is strong against ", end="")
     for key in strongTo.keys():
-        if not key == list(strongTo)[-1]:
+        if len(strongTo.keys()) == 1:
+            print(key,end=". ")
+        elif not key == list(strongTo)[-1]:
             print(key,end=", ")
         else:
             print("and " + key,end=". ")
@@ -143,7 +145,9 @@ def printNotStrongTo(notStrongTo):
     '''Prints a list of the types your team is not strong against'''
     print("Your team is not strong against ", end="")
     for item in notStrongTo:
-        if not item == notStrongTo[-1]:
+        if len(notStrongTo) == 1:
+            print(item,end=". ")
+        elif not item == notStrongTo[-1]:
             print(item,end=", ")
         else:
             print("or " + item,end=". ")
@@ -188,7 +192,9 @@ def printStrongToAdditions(strongToAdditions, notStrongToWeaknesses):
     for item in strongToAdditions:
         print ("Adding " + item + " would add type coverage against",end=" ")
         for aType in notStrongToWeaknesses[item]:
-            if not aType == notStrongToWeaknesses[item][-1]:
+            if len(notStrongToWeaknesses[item]) == 1:
+                print(aType + ".")
+            elif not aType == notStrongToWeaknesses[item][-1]:
                 print(aType,end=", ")
             else:
                 print("and " + aType + ".")
@@ -199,7 +205,14 @@ def readInput():
     if entered == "exit":
         return False
     enteredTypes = entered.split(", ")
+    for item in enteredTypes:
+        if not item in allTypes:
+            print("That's not a type of Pokemon. Try again.")
+            return True
 
+    return(doCalculations(enteredTypes))
+
+def doCalculations(enteredTypes):
     strongTo = calculateStrongTo(enteredTypes)
     notStrongTo = calculateNotStrongTo(strongTo)
     redundantStrongTo = calculateRedundantStrongTo(strongTo)
