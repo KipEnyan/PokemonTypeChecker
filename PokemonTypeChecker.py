@@ -6,6 +6,8 @@
 
 #parser = argparse.ArgumentParser(description='Pokemon Type Composition Checker')
 
+import string
+
 class Type():
     def __init__(self, strongTo, weakTo, immuneTo, strongFrom, weakFrom, immuneFrom):
         self.strongTo = strongTo
@@ -204,7 +206,9 @@ def readInput():
     entered = input()
     if entered == "exit":
         return False
-    enteredTypes = entered.split(", ")
+    enteredTypes = entered.split(",")
+    for i, item in enumerate(enteredTypes):
+        enteredTypes[i] = string.capwords(item)
     for item in enteredTypes:
         if not item in allTypes:
             print("That's not a type of Pokemon. Try again.")
