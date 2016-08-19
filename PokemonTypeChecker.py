@@ -77,7 +77,8 @@ def calculateRedundantStrongTo(strongTo):
 
 def calculateMostRedundant(redundantStrongTo):
     '''Returns a list of the types with the most redundancies'''
-    maxRedundant = max(redundantStrongTo.values())
+    if(redundantStrongTo):
+        maxRedundant = max(redundantStrongTo.values())
     mostRedundant = []
 
     for key, value in redundantStrongTo.items():
@@ -158,8 +159,10 @@ def printMostRedundant(mostRedundant, redundantStrongTo):
                 print(item,end=", ")
             else:
                 print("and " + item + ". (" + str(redundantStrongTo[item]) + " redundancies.)")
+    elif len(mostRedundant) == 1:
+        print("Your type with the most redundant coverage is " + str(mostRedundant[0]) + ". (" + str(redundantStrongTo[mostRedundant[0]]) + " redundancies.)")
     else:
-        print("Your type with the most redundant coverage is " + str(mostRedundant[0]) + ".")
+        print("You have no type coverage redundancies.")
 
 def printLostTypes(lostTypes):
     '''Prints what coverage would be lost if the most redundant types were removed'''
