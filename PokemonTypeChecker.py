@@ -1,11 +1,3 @@
-#from sqlalchemy import *
-#engine = create_engine('sqlite:///:memory:', echo=True)
-#connection = engine.connect()
-
-#import argparse
-
-#parser = argparse.ArgumentParser(description='Pokemon Type Composition Checker')
-
 import string
 
 class Type():
@@ -37,11 +29,6 @@ types["Ghost"] = Type(["Ghost","Psychic"],["Dark"],["Normal"],["Ghost","Dark"],[
 types["Ice"] = Type(["Dragon","Flying","Grass","Ground"],["Fire","Ice","Steel","Water"],[],["Fighting","Fire","Rock","Steel"],["Ice"],[])
 types["Psychic"] = Type(["Fighting","Poison"],["Psychic","Steel"],["Dark"],["Bug","Dark","Ghost"],["Fighting","Psychic"],[])
 types["Water"] = Type(["Fire","Ground","Rock"],["Dragon","Grass","Water"],[],["Electric","Grass"],["Fire","Ice","Steel","Water"],[])
-
-myTypes = ["Grass","Fairy","Fire","Bug","Electric","Psychic"]
-testTypes = ["Grass","Psychic","Fairy","Fire","Bug","Electric"]
-ericTypes = ["Electric", "Water","Ground","Rock"]
-programRunning = True
 
 def calculateStrongTo(myTypes):
     '''Returns a dict with the entered types as values and the types theyre strong against as keys'''
@@ -191,6 +178,7 @@ def printLostTypes(lostTypes):
                     print("and " + item,end=" coverage.\n")
 
 def printStrongToAdditions(strongToAdditions, notStrongToWeaknesses):
+    '''Prints which types would gain coverage if they were added'''
     for item in strongToAdditions:
         print ("Adding " + item + " would add type coverage against",end=" ")
         for aType in notStrongToWeaknesses[item]:
@@ -202,6 +190,7 @@ def printStrongToAdditions(strongToAdditions, notStrongToWeaknesses):
                 print("and " + aType + ".")
 
 def readInput():
+    '''Reads and sanitizes input'''
     print("Please enter the type composition of your team, separated by commas.")
     entered = input()
     if entered == "exit":
@@ -217,6 +206,7 @@ def readInput():
     return(doCalculations(enteredTypes))
 
 def doCalculations(enteredTypes):
+    '''Does the things'''
     strongTo = calculateStrongTo(enteredTypes)
     notStrongTo = calculateNotStrongTo(strongTo)
     redundantStrongTo = calculateRedundantStrongTo(strongTo)
@@ -233,9 +223,7 @@ def doCalculations(enteredTypes):
     print()
     return True
 
-
 print("Welcome to the Pokemon Type Calculator!")
 print("Type 'exit' to quit.")
 while(readInput()):
     pass
-
